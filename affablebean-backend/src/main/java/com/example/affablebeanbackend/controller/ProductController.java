@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +32,45 @@ public class ProductController {
     @GetMapping("/")
     public String home(){
         return "index";
+    }
+
+    @SneakyThrows
+    @ResponseBody
+    @PostMapping("/read-excel-product")
+    public String readExcelV2(@RequestParam("file1")MultipartFile file) throws IOException {
+        XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
+        XSSFSheet sheet = workbook.getSheetAt(0);
+        Iterator<Row> rowIterator = sheet.rowIterator();
+        while (rowIterator.hasNext()){
+            Row row = rowIterator.next();
+            Iterator<Cell> cellIterator = null;
+            if (row.getRowNum() != 0){
+                cellIterator = row.cellIterator();
+                while (cellIterator.hasNext()){
+                    Cell cell = cellIterator.next();
+                    if (cell.getColumnIndex() == 0){
+                        System.out.print((int) cell.getNumericCellValue() + "\t\t");
+                    }
+                    else if (cell.getColumnIndex() ==1 ) {
+                        System.out.print(cell.getStringCellValue() + "\t\t");
+                    }
+                    else if (cell.getColumnIndex() ==2 ) {
+                        System.out.print(cell.getNumericCellValue() + "\t\t");
+                    }
+                    else if (cell.getColumnIndex() ==3 ) {
+                        System.out.print(cell.getStringCellValue() + "\t\t");
+                    }
+                    else if (cell.getColumnIndex() ==4 ) {
+                        System.out.print(cell.getStringCellValue() + "\t\t");
+                    }
+                    else if (cell.getColumnIndex() ==5 ) {
+                        System.out.println((int) cell.getNumericCellValue());
+                    }
+                }
+            }
+        }
+
+        return "success";
     }
 
     @Transactional
@@ -56,6 +96,7 @@ public class ProductController {
                         category.setId((int) cell.getNumericCellValue());
                         System.out.print((int) cell.getNumericCellValue() + "\t\t");
                     } else if (cell.getColumnIndex() == 1) {
+                        cell.getLocalDateTimeCellValue();
                         category.setName(cell.getStringCellValue());
                         System.out.println(cell.getStringCellValue());
                     }

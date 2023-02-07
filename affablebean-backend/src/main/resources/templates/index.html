@@ -11,6 +11,16 @@
 
 <div th:replace="fragments/categoryUpload.html :: categoryUpload"></div>
 
+<div class="container my-5 p-5 bg-light">
+    <form action="#" th:action="@{/backend/read-excel-product}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="product" class="form-label">Product Upload</label>
+            <input type="file" class="form-control" id="product" name="file1">
+        </div>
+        <input type="submit" value="Upload Product" class="btn btn-info btn-lg">
+    </form>
+</div>
+
 
 
 

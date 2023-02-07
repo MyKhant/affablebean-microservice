@@ -19,13 +19,19 @@ public class Product {
     private String name;
 
     @Column(name = "price")
-    private String price;
+    private double price;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "last_update")
     private LocalDateTime lastUpdate;
+
+    @Transient // only for data access
+    private String date;
+
+    @Transient
+    private int categoryId;
     @JoinColumn(name = "category_id")
     @ManyToOne
     private Category category;
@@ -33,10 +39,12 @@ public class Product {
     @Override
     public String toString() {
         return "Product{" +
-                "name='" + name + '\'' +
-                ", price='" + price + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
                 ", description='" + description + '\'' +
                 ", lastUpdate=" + lastUpdate +
                 '}';
     }
+
 }

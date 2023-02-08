@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html th:replace="layouts/masterLayout :: layout(~{::main})" lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<main role="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Welcome to the Online Home of the Affable Bean Green Grocer</h3>
+                <br>
+                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus aliquam aperiam aut consectetur deserunt fugiat laboriosam magni minima molestiae nihil obcaecati pariatur, placeat quia saepe suscipit temporibus tenetur ut voluptate.</p>
+            </div>
+            <div class="col-md-6">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <a th:href="@{'/webui/products?category=dairy'}"> <img src="../static/bootstrap/images/categories/dairy.jpg"
+                             th:src="@{/bootstrap/images/categories/dairy.jpg}" alt="" class="img-fluid"> </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a th:href="@{'/webui/products?category=meats'}"> <img src="../static/bootstrap/images/categories/meats.jpg"
+                             th:src="@{/bootstrap/images/categories/meats.jpg}" alt="" class="img-fluid"> </a>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <a th:href="@{'/webui/products?category=bakery'}"> <img src="../static/bootstrap/images/categories/bakery.jpg"
+                             th:src="@{/bootstrap/images/categories/bakery.jpg}" alt="" class="img-fluid"> </a>
+                    </div>
+                    <div class="col-md-6">
+                        <a th:href="@{'/webui/products?category=fruit_veg'}"> <img src="../static/bootstrap/images/categories/fruitveg.jpg"
+                             th:src="@{/bootstrap/images/categories/fruitveg.jpg}" alt="" class="img-fluid"> </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

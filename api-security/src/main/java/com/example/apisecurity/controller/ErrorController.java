@@ -1,10 +1,7 @@
 package com.example.apisecurity.controller;
 
 
-import com.example.apisecurity.exception.InvalidCredentialError;
-import com.example.apisecurity.exception.NoBearToken;
-import com.example.apisecurity.exception.PasswordNotMatchError;
-import com.example.apisecurity.exception.UserNotFoundException;
+import com.example.apisecurity.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @ControllerAdvice
 public class ErrorController {
     @ExceptionHandler({PasswordNotMatchError.class,
-            InvalidCredentialError.class, NoBearToken.class, UserNotFoundException.class})
+            InvalidCredentialError.class, NoBearToken.class, UserNotFoundException.class, UnAuthenticatedError.class})
     public ResponseEntity handleException(Throwable throwable)throws Throwable{
         if(throwable instanceof PasswordNotMatchError){
             return ResponseEntity
@@ -35,6 +32,10 @@ public class ErrorController {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body("User Not Found form Token!");
+        } else if (throwable instanceof UnAuthenticatedError) {
+            return ResponseEntity
+                    .status(401)
+                    .body("Refresh Token is not authenticated");
         }
 
         return null;

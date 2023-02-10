@@ -4,6 +4,7 @@ import com.example.apisecurity.data.User;
 import com.example.apisecurity.data.UserDao;
 import com.example.apisecurity.exception.InvalidCredentialError;
 import com.example.apisecurity.exception.PasswordNotMatchError;
+import com.example.apisecurity.exception.UnAuthenticatedError;
 import com.example.apisecurity.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,5 +58,11 @@ public class UserService {
                 )
         );
 
+    }
+
+    public Login refreshAccess(String refreshToken){
+        var refreshJwt = Jwt.from(refreshToken, refreshSecret);
+
+        return Login.of(refreshJwt.getUserId(), accessSecret, refreshSecret);
     }
 }

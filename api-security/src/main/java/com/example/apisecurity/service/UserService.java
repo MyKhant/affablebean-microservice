@@ -1,5 +1,6 @@
 package com.example.apisecurity.service;
 
+import com.example.apisecurity.data.Token;
 import com.example.apisecurity.data.User;
 import com.example.apisecurity.data.UserDao;
 import com.example.apisecurity.exception.InvalidCredentialError;
@@ -26,6 +27,20 @@ public class UserService {
     @Value("${secret.refresh-token.key}")
     private String refreshSecret;
 
+    public Boolean logout(String refreshToken) {
+        var refreshJwt = Jwt.from(refreshToken,refreshSecret);
+        var user = userDao.findById(refreshJwt.getUserId())
+                .orElseThrow(UserNotFoundException::new);
+        var tokenIsRemoved = user.removeTokenIf(token -> Objects.equals(
+                token.refreshToken(), refreshToken
+        ));
+        System.out.println("RemoveToken============" + tokenIsRemoved);
+        if (tokenIsRemoved){
+            userDao.save(user);
+        }
+        return tokenIsRemoved;
+    }
+
     public User getUserFromToken(String token) {
         return userDao.findById(Jwt.from(token,accessSecret).getUserId())
                 .orElseThrow(UserNotFoundException::new);
@@ -38,7 +53,15 @@ public class UserService {
         if(!passwordEncoder.matches(password,user.getPassword())){
             throw new InvalidCredentialError();
         }
-        return Login.of(user.getId(), accessSecret,refreshSecret);
+        var login = Login.of(user.getId(), accessSecret,refreshSecret);
+        var refreshToken = login.getRefreshToken();
+        user.addToken(new Token(
+                refreshToken.getToken(),
+                refreshToken.getIssuedAt(),
+                refreshToken.getExpiredAt()
+        ));
+        userDao.save(user);
+        return login;
     }
     public User register(String firstName,
                          String lastName,
@@ -62,7 +85,12 @@ public class UserService {
 
     public Login refreshAccess(String refreshToken){
         var refreshJwt = Jwt.from(refreshToken, refreshSecret);
+        var user = userDao.findUserIdAndTokenByRefreshToken(
+                refreshJwt.getUserId(),
+                refreshJwt.getToken(),
+                refreshJwt.getExpiredAt()
+        ).orElseThrow(UnAuthenticatedError::new);
 
-        return Login.of(refreshJwt.getUserId(), accessSecret, refreshSecret);
+        return Login.of(user.getId(), accessSecret, refreshSecret);
     }
 }

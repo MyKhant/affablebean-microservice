@@ -56,6 +56,15 @@ public class AuthController {
         return new LoginResponse(login.getAccessToken().getToken());
     }
 
+    record ResetRequest(
+            String token, String password,@JsonProperty("password_confirm") String passwordConfirm
+    ){}
+    record ResetResponse(String message){}
+    @PostMapping("/reset")
+    public ResetResponse reset(@RequestBody ResetRequest request) {
+        userService.reset(request.token(), request.password(), request.passwordConfirm());
+        return new ResetResponse("success reset password!");
+    }
 
   /*
   curl -X POST -H "Content-Type: application/json" -d '{"first_name":"john","last_name":"william","email":"william","password":"john","confirm_password":"john"}' http://localhost:8070/security/register
@@ -79,6 +88,16 @@ public class AuthController {
                 user.getLastName(),
                 user.getEmail()
         );
+    }
+
+
+    record ForgetRequest(String email){}
+    record ForgetResponse(String email){}
+    @PostMapping("/forgot")
+    public ForgetResponse forget(@RequestBody ForgetRequest forgetRequest, HttpServletRequest request) {
+        var originUrl = request.getHeader("Origin");
+        userService.forgot(forgetRequest.email, originUrl);
+        return new ForgetResponse("successfully forgot password.");
     }
 
     record UserResponse(Long id,

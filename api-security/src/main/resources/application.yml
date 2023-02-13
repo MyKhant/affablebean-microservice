@@ -12,9 +12,19 @@ spring:
     init:
       platform: h2
       mode: always
+  mail:
+    host: 0.0.0.0
+    port: 1025
+  application:
+    name: api-security
 
 secret:
   access-token:
     key: eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY3NTkyOTY0MiwiaWF0IjoxNjc1OTI5NjQyfQ.OBtGAnwECUA-UWGJXs8zJzw-U7WI7dYXOMBdhjEwXoo
   refresh-token:
     key: eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY3NTkyOTY0MiwiaWF0IjoxNjc1OTI5NjQyfQ.OBtGAnwECUA-UWGJXs8zJzw-U7WI7dYXOMBdhjEwXoo
+
+application:
+  frontend:
+    default:
+      url: http://localhost:8070
